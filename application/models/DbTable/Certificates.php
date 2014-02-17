@@ -16,7 +16,7 @@
  *
  * @author coola
  */
-class Application_Model_DbTable_Certificates extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_Certificates extends Application_Model_DbTable_Abstract {
 
     /** Table name */
     protected $_name = 'certificates';

@@ -10,7 +10,8 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        echo 11;exit;
+        $mapper = new Application_Model_Mapper_Certificates();
+        var_dump($mapper->fetchAll());exit;
     }
 
 

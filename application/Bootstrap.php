@@ -28,4 +28,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         $front->SetBaseurl($baseUrl); //->setRequest('')
     }
 
+    /**
+     * Retrieve Settings of application.ini
+     * @param string $name
+     * @return mixed
+     */
+    static public function getGlobalSettings($name) {
+        $front = Zend_Controller_Front::getInstance();
+        $bootstrap = $front->getParam('bootstrap');
+        $option = $bootstrap->getOptions();
+        $names = explode('.', $name);
+        foreach ($names as $name) {
+            $option = $option[$name];
+        }
+        return $option;
+    }
+
 }
