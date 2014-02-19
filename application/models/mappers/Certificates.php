@@ -35,7 +35,7 @@ class Application_Model_Mapper_Certificates extends Application_Model_Mapper_Abs
      * Fetches rows by primary key
      *
      * @param int $id
-     * @return Application_Model_Product
+     * @return Application_Model_Certificates
      */
     public function find() {
         return parent::find(func_get_arg(0));
@@ -44,7 +44,7 @@ class Application_Model_Mapper_Certificates extends Application_Model_Mapper_Abs
     /**
      * Inserts a new model.
      *
-     * @param Application_Model_Product $model  Sql table data model
+     * @param Application_Model_Certificates $model  Sql table data model
      * @return int The primary key of the row inserted.
      */
     public function insert($model) {
@@ -56,7 +56,7 @@ class Application_Model_Mapper_Certificates extends Application_Model_Mapper_Abs
     /**
      * Updates existing model.
      *
-     * @param Application_Model_Product $model  Sql table data model
+     * @param Application_Model_Certificates $model  Sql table data model
      * @return int The number of rows updated.
      */
     public function remove($model) {
@@ -69,7 +69,7 @@ class Application_Model_Mapper_Certificates extends Application_Model_Mapper_Abs
     /**
      * remove existing model.
      *
-     * @param Application_Model_Product $model  Sql table data model
+     * @param Application_Model_Certificates $model  Sql table data model
      * @return int The number of rows deleted.
      */
     public function update($model) {
@@ -87,7 +87,7 @@ class Application_Model_Mapper_Certificates extends Application_Model_Mapper_Abs
      * @param string|array                      $order  OPTIONAL An SQL ORDER clause.
      * @param int                               $count  OPTIONAL An SQL LIMIT count.
      * @param int                               $offset OPTIONAL An SQL LIMIT offset.
-     * @return array|Application_Model_Product
+     * @return array|Application_Model_Certificates
      */
     public function fetchAll($where = null, $order = null, $count = null, $offset = null) {
         return parent::fetchAll($where, $order, $count, $offset);

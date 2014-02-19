@@ -1,0 +1,7 @@
+#
+# robots.txt for education site
+#
+
+User_agent: *
+Disallow: /admin
+#Disallow: /
