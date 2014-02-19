@@ -789,6 +789,68 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     }
 
     /**
+     * Retrieve error messages from elements failing validations
+     *
+     * @author coola
+     * @param  string $name
+     * @param  bool $suppressArrayNotation
+     * @return array
+     */
+    public function getMessages($name = null, $suppressArrayNotation = false)
+    {
+        if (null !== $name) {
+            if (isset($this->_elements[$name])) {
+                return $this->getElement($name)->getMessages();
+            } else if (isset($this->_subForms[$name])) {
+                return $this->getSubForm($name)->getMessages(null, true);
+            }
+            foreach ($this->getSubForms() as $key => $subForm) {
+                if ($subForm->isArray()) {
+                    $belongTo = $subForm->getElementsBelongTo();
+                    if ($name == $this->_getArrayName($belongTo)) {
+                        return $subForm->getMessages(null, true);
+                    }
+                }
+            }
+        }
+
+        $customMessages = $this->_getErrorMessages();
+        if ($this->isErrors() && !empty($customMessages)) {
+            return $customMessages;
+        }
+
+        $messages = array();
+
+        foreach ($this->getElements() as $name => $element) {
+            $eMessages = $element->getMessages();
+            if (!empty($eMessages)) {
+                $messages[$name] = $eMessages;
+            }
+        }
+
+        foreach ($this->getSubForms() as $key => $subForm) {
+            $merge = $subForm->getMessages(null, true);
+            if (!empty($merge)) {
+                if (!$subForm->isArray()) {
+                    $merge = array($key => $merge);
+                } else {
+                    $merge = $this->_attachToArray($merge,
+                                                   $subForm->getElementsBelongTo());
+                }
+                $messages = $this->_array_replace_recursive($messages, $merge);
+            }
+        }
+
+        if (!$suppressArrayNotation &&
+            $this->isArray() &&
+            !$this->_getIsRendered()) {
+            $messages = $this->_attachToArray($messages, $this->getElementsBelongTo());
+        }
+
+        return $messages;
+    }
+
+    /**
      * Retrieve form method
      *
      * @return string
