@@ -23,6 +23,9 @@ class Admin_LoginController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
+
+        $capthcha = new Coola_Captcha();
+        echo $capthcha->getCode();exit;
         $this->view->headTitle('管理员登陆');
         $message = '';
         $form = new Admin_Form_Login(array('action' => $this->view->url()));

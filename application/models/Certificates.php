@@ -11,7 +11,7 @@
  */
 
 /**
- * Description of Certificate
+ * The model of Certificate
  *
  * @author coola
  */
@@ -133,7 +133,7 @@ class Application_Model_Certificates extends Application_Model_Abstract {
             'id'      => $this->_id,
             'title'   => $this->_title,
             'name_cn' => $this->_name_cn,
-            'name_en' => $this->name_en,
+            'name_en' => $this->_name_en,
             'intro'   => $this->_intro,
         );
     }
