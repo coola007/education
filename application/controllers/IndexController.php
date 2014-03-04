@@ -1,19 +1,19 @@
 <?php
 
-class IndexController extends Zend_Controller_Action
-{
+class IndexController extends Zend_Controller_Action {
 
-    public function init()
-    {
-        /* Initialize action controller here */
+    public function init() {
+        parent::init();
+        $this->_helper->viewRenderer->setNoRender();
     }
 
-    public function indexAction()
-    {
-        $mapper = new Application_Model_Mapper_Certificates();
-        var_dump($mapper->fetchAll());exit;
+    public function indexAction() {
+        $captcha = new Coola_Captcha(100,40);
+        $captcha->image();
+        if($_SESSION['coola_captcha'] != $captcha->getCode()){
+            echo 'error';
+        }
+        exit;
     }
-
 
 }
-
