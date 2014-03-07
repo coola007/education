@@ -118,8 +118,6 @@ class Coola_Captcha {
         return array(
             rand($start, $end), rand($start, $end), rand($start, $end)
         );
-//        $colorarr = array('#000000', '#663300', '#993399', '#FF3300', '#999999', '#9966FF', '#0000FF', '#339900', '#CC6633', '#CC9999', '#666600', '#990000', '#FFFF00', '#9999CC', '#3333CC', '#CCCCCC');
-//        return $this->color2rgb($colorarr [rand(0, 15)]);
     }
 
     /**
@@ -179,12 +177,8 @@ class Coola_Captcha {
      */
     private function addDisturb() {
         //添加噪点
-        $noisyNum = rand(0, $this->_disturbNum);
-        $noisyColor = $this->getRandColor(100, 255);
-        for ($i = 0; $i < $noisyNum; $i++) {
-            imagesetpixel($this->_image, rand(0, $this->_widht), rand(0, $this->_height), $noisyColor);
-        }
-
+//        $this->addPixel($this->getRandColor(100, 255),100);
+        $this->addLine($this->getRandColor(100, 200), 10);
         //添加网格
 //        $lineGap = 100;
 //        for ($i = 0; $i < ($this->_widht / $lineGap); $i ++) {
@@ -193,26 +187,58 @@ class Coola_Captcha {
 //        for ($i = 0; $i < ($this->_height / $lineGap); $i ++) {
 //            imageline($this->_image, 0, $i * $lineGap, $this->_widht, $i * $lineGap, $noisyColor);
 //        }
-        unset($noisyColor);
-
+//
 //        $color = $this->getRandColor(200, 255);
 //        //添加干扰线
-//        $lineNum = 100;
+//        $lineNum = 20;
 //        for ($i = 0; $i < $lineNum; $i++) {
 //            $wr = mt_rand(0, $this->_widht);
 //            $hr = mt_rand(0, $this->_height);
 //            $lineColor = imagecolorallocate($this->_image, $color[0], $color[1], $color[2]);
-//            imagearc($this->_image, $this->_widht - floor($wr / 2), floor($hr / 2), $wr, $hr, rand(90, 180), rand(180, 270), $lineColor);
+//            imagearc($this->_image, mt_rand(0, $this->_widht - floor($wr / 2)), mt_rand(0, floor($hr / 2)), $wr, $hr, rand(0, 60), rand(60, 120), $lineColor);
 //            unset($lineColor);
 //            unset($wr, $hr);
 //        }
+//
+//        $num = 100;
+//        for ($i; $i < $num; $i++) {
+//            $color = $this->getRandColor(200, 255);
+//            imagestring($this->_image, mt_rand(1, 5), mt_rand(0, $this->_widht), mt_rand(0, $this->_height), '*', $color);
+//            unset($color);
+//        }
+    }
 
-        $num = 100;
-        for ($i; $i < $num; $i++) {
-            $color = $this->getRandColor(200, 255);
-            imagestring($this->_image, mt_rand(1, 5), mt_rand(0, $this->_widht), mt_rand(0, $this->_height), '*', $color);
-            unset($color);
+    protected function addArc($color, $num = 20) {
+
+    }
+
+    /**
+     * 添加线条
+     * @param imagecoolorallocate $color
+     * @param int $num
+     */
+    protected function addLine($color, $num = 10) {
+        $num = $num > 0 ? $num : 20;
+
+        for ($i = 0; $i < $num; $i ++) {
+            imageline($this->_image, mt_rand($this->_widht * 0.01, $this->_widht * 0.9), mt_rand($this->_height * 0.01, $this->_height * 0.9), mt_rand($this->_widht * 0.2, $this->_widht * 0.99), mt_rand($this->_height * 0.2, $this->_height * 0.99), $color);
         }
+
+        unset($color);
+    }
+
+    /**
+     * 添加噪点
+     * @param imagecolorallocate $color
+     * @param int $num
+     */
+    protected function addPixel($color, $num = 50) {
+        $num = $num > 0 ? $num : 100;
+        for ($i = 0; $i < $num; $i++) {
+            imagesetpixel($this->_image, rand(0, $this->_widht), rand(0, $this->_height), $color);
+        }
+
+        unset($color);
     }
 
     /**
