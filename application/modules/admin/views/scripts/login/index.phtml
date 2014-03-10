@@ -57,15 +57,16 @@
         <br /><script language="javascript" type="text/javascript">
             function PasteSn()
             {
-                if(!window.clipboardData)return;
-                var CopySn=clipboardData.getData("Text");
-                if (CopySn.length==36)
+                if (!window.clipboardData)
+                    return;
+                var CopySn = clipboardData.getData("Text");
+                if (CopySn.length == 36)
                 {
-                    document.all("serial")[0].value=CopySn.substring(0, 7);
-                    document.all("serial")[1].value=CopySn.substring(9, 13);
-                    document.all("serial")[2].value=CopySn.substring(14, 18);
-                    document.all("serial")[3].value=CopySn.substring(19, 23);
-                    document.all("serial")[4].value=CopySn.substring(24, 36);
+                    document.all("serial")[0].value = CopySn.substring(0, 7);
+                    document.all("serial")[1].value = CopySn.substring(9, 13);
+                    document.all("serial")[2].value = CopySn.substring(14, 18);
+                    document.all("serial")[3].value = CopySn.substring(19, 23);
+                    document.all("serial")[4].value = CopySn.substring(24, 36);
                     document.all("serial")[4].focus();
                 }
             }
@@ -77,29 +78,50 @@
                 this_sn.value = this_sn.value.replace("\-", "");
                 //alert(this_sn.value);
                 var next_sn = document.all("serial")[num + 1]
-                if (num == 0){ if (this_sn.value.length>=8) next_sn.focus()}
-                if (num == 1){ if (this_sn.value.length>=4) next_sn.focus()}
-                if (num == 2){ if (this_sn.value.length>=4) next_sn.focus()}
-                if (num == 3){ if (this_sn.value.length>=4) next_sn.focus()}
+                if (num == 0) {
+                    if (this_sn.value.length >= 8)
+                        next_sn.focus()
+                }
+                if (num == 1) {
+                    if (this_sn.value.length >= 4)
+                        next_sn.focus()
+                }
+                if (num == 2) {
+                    if (this_sn.value.length >= 4)
+                        next_sn.focus()
+                }
+                if (num == 3) {
+                    if (this_sn.value.length >= 4)
+                        next_sn.focus()
+                }
                 //if (! this_sn.value.match(/^[0-9a-zA-Z]$/)) alert('提示：密码不合格');
             }
         </script>
         <div style="text-align:center;"><?php echo $this->message; ?> </div>
-        <form action="<?php echo $this->url(array('action' => 'index', 'controller' => 'login', 'module'=>'admin')); ?>" method="post" name="admin" target="_top" id="admin">
+        <form action="<?php echo $this->url(array('action' => 'index', 'controller' => 'login', 'module' => 'admin')); ?>" method="post" name="admin" target="_top" id="admin">
             <table width="600" border="0" align="center" cellpadding="2" cellspacing="0">
                 <tr>
                     <td>ＩＤ：
-                        <input name="<?php echo $this->form->getId()->getName(); ?>" type="text" id="id" size="12" value="" maxlength="12" onkeyup="if(event.keyCode !=37 && event.keyCode != 39) value=value.replace(/\D/g,'');" onblur="if (this.value =='') this.value='0'" style="width: 100px;" /></td>
+                        <input name="<?php echo $this->form->getId()->getName(); ?>" type="text" id="id" size="12" value="" maxlength="12" onkeyup="if (event.keyCode != 37 && event.keyCode != 39)
+                                    value = value.replace(/\D/g, '');" onblur="if (this.value == '')
+                                                this.value = '0'" style="width: 100px;" /></td>
                     <td width="400">&nbsp;</td>
                 </tr>
                 <tr>
                     <td>用户名：
-                        <input name="<?php echo $this->form->getName()->getName(); ?>" type="text" id="id" size="12" value="" maxlength="12" onkeyup="if(event.keyCode !=37 && event.keyCode != 39) value=value.replace(/\D/g,'');" onblur="if (this.value =='') this.value=''" style="width: 100px;" /></td>
+                        <input name="<?php echo $this->form->getName()->getName(); ?>" type="text" id="id" size="12" value="" maxlength="12" onkeyup="if (event.keyCode != 37 && event.keyCode != 39)
+                                    value = value.replace(/\D/g, '');" onblur="if (this.value == '')
+                                                this.value = ''" style="width: 100px;" /></td>
                     <td width="400" >&nbsp;</td>
                 </tr>
                 <tr>
                     <td>密 码：
                         <input name="<?php echo $this->form->getPass()->getName(); ?>" type="password" id="password" size="12" style="width: 100px;" value="" /></td>
+                    <td width="400">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>验证码：
+                        <input name="captcha" type="text" id="captcha" size="12" style="width: 100px;" value="" /><img src="/captcha/index/" onclick="this.src = '/captcha/index?rand=' + Math.random();" /></td>
                     <td width="400">&nbsp;</td>
                 </tr>
                 <tr>

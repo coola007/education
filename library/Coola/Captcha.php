@@ -52,23 +52,11 @@ class Coola_Captcha {
         $this->_image = imagecreate($this->_widht, $this->_height);
     }
 
-    public static function init(array $config = array()) {
-        if (is_array($config)) {
-            foreach ($config as $key => $val) {
-                if (isset($this->_{$key})) {
-                    $this->_{$key} = $val;
-                }
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * 生成图片
      */
     public function image() {
-        $_SESSION['coola_captcha'] = $this->getCode();
+        $this->getCode();
         $this->backgroud();
         $this->addDisturb();
         $this->addWordEn();
@@ -105,6 +93,7 @@ class Coola_Captcha {
      */
     public function getCode() {
         if (!$this->_code) {
+            $_SESSION['test_captcha'] = date('H:i:s');
             $this->getRandCode();
         }
 
@@ -161,6 +150,14 @@ class Coola_Captcha {
     }
 
     /**
+     * 返回文字大小
+     * @return array
+     */
+    private function getFontSize() {
+        return array('min' => $this->_height * 0.4, 'max' => $this->_height * 0.6);
+    }
+
+    /**
      * 增加背景色
      */
     private function backgroud() {
@@ -177,38 +174,19 @@ class Coola_Captcha {
      */
     private function addDisturb() {
         //添加噪点
-//        $this->addPixel($this->getRandColor(100, 255),100);
-        $this->addLine($this->getRandColor(100, 200), 10);
-        //添加网格
-//        $lineGap = 100;
-//        for ($i = 0; $i < ($this->_widht / $lineGap); $i ++) {
-//            imageline($this->_image, $i * $lineGap, 0, $i * $lineGap, $this->_height, $noisyColor);
-//        }
-//        for ($i = 0; $i < ($this->_height / $lineGap); $i ++) {
-//            imageline($this->_image, 0, $i * $lineGap, $this->_widht, $i * $lineGap, $noisyColor);
-//        }
-//
-//        $color = $this->getRandColor(200, 255);
-//        //添加干扰线
-//        $lineNum = 20;
-//        for ($i = 0; $i < $lineNum; $i++) {
-//            $wr = mt_rand(0, $this->_widht);
-//            $hr = mt_rand(0, $this->_height);
-//            $lineColor = imagecolorallocate($this->_image, $color[0], $color[1], $color[2]);
-//            imagearc($this->_image, mt_rand(0, $this->_widht - floor($wr / 2)), mt_rand(0, floor($hr / 2)), $wr, $hr, rand(0, 60), rand(60, 120), $lineColor);
-//            unset($lineColor);
-//            unset($wr, $hr);
-//        }
-//
-//        $num = 100;
-//        for ($i; $i < $num; $i++) {
-//            $color = $this->getRandColor(200, 255);
-//            imagestring($this->_image, mt_rand(1, 5), mt_rand(0, $this->_widht), mt_rand(0, $this->_height), '*', $color);
-//            unset($color);
-//        }
+        $this->addPixel($this->getRandColor(100, 255), 100);
+        $this->addLine($this->getRandColor(100, 200), 4);
+//        $this->addSnow($this->getRandColor(150, 205));
     }
 
-    protected function addArc($color, $num = 20) {
+    private function addSnow($color, $num = 50) {
+        for ($i = 0; $i < $num; $i++) {
+            imagestring($this->_image, mt_rand(1, 5), mt_rand(0, $this->_widht), mt_rand(0, $this->_height), '*', $color);
+        }
+        unset($color);
+    }
+
+    private function addArc($color, $num = 20) {
 
     }
 
@@ -217,7 +195,7 @@ class Coola_Captcha {
      * @param imagecoolorallocate $color
      * @param int $num
      */
-    protected function addLine($color, $num = 10) {
+    private function addLine($color, $num = 10) {
         $num = $num > 0 ? $num : 20;
 
         for ($i = 0; $i < $num; $i ++) {
@@ -232,7 +210,7 @@ class Coola_Captcha {
      * @param imagecolorallocate $color
      * @param int $num
      */
-    protected function addPixel($color, $num = 50) {
+    private function addPixel($color, $num = 50) {
         $num = $num > 0 ? $num : 100;
         for ($i = 0; $i < $num; $i++) {
             imagesetpixel($this->_image, rand(0, $this->_widht), rand(0, $this->_height), $color);
@@ -245,12 +223,16 @@ class Coola_Captcha {
      * 添加英文单词
      */
     private function addWordEn() {
+        $_SESSION['coola_captcha'] = $this->_code;
+        if (!$fontSize = $this->_size) {
+            $size = $this->getFontSize();
+            $fontSize = mt_rand($size['min'], $size['max']);
+        }
         $font = $this->getFont();
         $x = $this->_widht / $this->_length;
         for ($i = 0; $i < $this->_length; $i++) {
             $color = $this->getRandColor(0, 160);
-            imagettftext($this->_image, $this->_size, mt_rand(-30, 30), $x * $i + mt_rand(1, 5), $this->_height / 1.3, $color, $font, $this->_code[$i]);
-//            imagestring($this->_image, 5, $x * $i + mt_rand(1, 5), $this->_height / 2.5, $this->_code[$i], $color);
+            imagettftext($this->_image, $fontSize, mt_rand(-30, 30), $x * $i + mt_rand(1, 5), $this->_height / 1.3, $color, $font, $this->_code[$i]);
             unset($color);
         }
     }
@@ -273,6 +255,15 @@ class Coola_Captcha {
         header("Content-type: {$headerType[$this->_format]}");
         $create_image[$this->_format]($this->_image);
         imagedestroy($this->_image);
+    }
+
+    /**
+     * 验证码验证
+     * @param string $code
+     * @return boolean
+     */
+    public function isValid($code) {
+        return strcasecmp($code, $_SESSION['coola_captcha']) == 0 ? TRUE : FALSE;
     }
 
 }

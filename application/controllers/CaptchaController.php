@@ -23,8 +23,10 @@ class CaptchaController extends Zend_Controller_Action {
     }
 
     public function indexAction() {
-        $captcha = new Coola_Captcha();
+        header('Cache-Control	no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        $captcha = new Coola_Captcha(); //Coola_Captcha::init();
         $captcha->show();
+        exit;
     }
 
 }
